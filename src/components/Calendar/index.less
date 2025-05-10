@@ -1,0 +1,40 @@
+.marketing-calendar-page-setting{
+  &__center{
+    display: flex;
+    flex-direction: row;
+    &__left{
+      width: 100%;
+    }
+  }
+
+  //以下是日历组件样式
+  &__calendar-date {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    .ant-fullcalendar-date{
+      position: relative;
+    }
+    &__tag{
+      position: absolute;
+      top: 8px;
+      right: 5px;
+      color: #f4b443;
+    }
+  }
+  .ant-fullcalendar-tbody{
+    border-right: 1px solid #e3e3e3;
+    border-bottom: 1px solid #e3e3e3;
+  }
+  .notes-month {
+    font-size: 28px;
+    text-align: center;
+  }
+  .notes-month section {
+    font-size: 28px;
+  }
+  .ant-fullcalendar-fullscreen .ant-fullcalendar-value {
+    text-align: left;
+  }
+}
+
