@@ -115,6 +115,21 @@ export async function getHealthyKnowledgeVoPageUsingPost(
   });
 }
 
+/** 获取健康知识（分页） POST /api/healthy/knowledge/page/vo/my */
+export async function getStarHealthyKnowledgeVoPageByIdUsingPost(
+  body: API.HealthyKnowledgeQueryDTO,
+  options?: { [key: string]: any },
+) {
+  return request<API.RIPageHealthyKnowledgeVO_>('/api/healthy/knowledge/page/vo/my', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 获取健康知识（分页） POST /api/healthy/knowledge/page/vo/star */
 export async function getStarHealthyKnowledgeVoPageUsingPost(
   body: API.HealthyKnowledgeQueryDTO,

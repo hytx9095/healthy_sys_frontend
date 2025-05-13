@@ -7,18 +7,21 @@ import {
   Form,
   List,
   message,
-  Modal, Row, Upload,
+  Modal, Row,
 } from 'antd';
 import Search from 'antd/es/input/Search';
 import React, {useEffect, useState} from 'react';
 import {ProFormText} from "@ant-design/pro-components";
 import dayjs from "dayjs";
 import {history} from '@umijs/max';
-import {ProFormDatePicker, ProFormSelect, ProFormTextArea} from "@ant-design/pro-form/lib";
+import { ProFormSelect, ProFormTextArea} from "@ant-design/pro-form/lib";
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import {ProFormUploadDragger} from "@ant-design/pro-form";
-import {UploadOutlined, UserOutlined} from "@ant-design/icons";
-import {addDoctorInfoUsingPost, getDoctorInfoPageByUserUsingPost} from "@/services/healthy_sys/doctorInfoController";
+import {UserOutlined} from "@ant-design/icons";
+import {
+  addDoctorInfoUsingPost,
+  getDoctorInfoByUserIdUsingPost,
+  getDoctorInfoPageByUserUsingPost, updateDoctorInfoUsingPost
+} from "@/services/healthy_sys/doctorInfoController";
 
 /**
  * 医生咨询页面
@@ -40,6 +43,7 @@ const DockerConsultation: React.FC = () => {
   const [searchParams, setSearchParams] = useState<API.DoctorInfoQueryDTO>({...initSearchParams});
   const {initialState} = useModel('@@initialState');
   const {currentUser} = initialState ?? {};
+  const [currentDoctorInfo, setCurrentDoctorInfo] = useState<API.DoctorInfo>();
   const [doctorInfoList, setDoctorInfoList] = useState<API.DoctorInfoVO[]>();
   const [total, setTotal] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
@@ -58,6 +62,15 @@ const DockerConsultation: React.FC = () => {
         setTotal(res.data.total ?? 0);
       } else {
         message.error('获取医生信息失败');
+      }
+
+      if (currentUser?.role === 'doctor'){
+        const getRes = await getDoctorInfoByUserIdUsingPost({
+          userId: currentUser?.id
+        })
+        if (getRes.code === 0){
+          setCurrentDoctorInfo(getRes.data)
+        }
       }
     } catch (e: any) {
       message.error('获取医生信息失败，' + e.message);
@@ -98,6 +111,27 @@ const DockerConsultation: React.FC = () => {
     }
     setAddDoctorInfoModel(false);
     doctorInfoForm.resetFields()
+    loadData();
+  };
+
+  const updateDoctorInfo = async () => {
+    try {
+      const values = await doctorInfoForm.validateFields();
+      const res = await updateDoctorInfoUsingPost({
+        doctorId: currentDoctorInfo?.id,
+        type: values.type,
+        evidence: values.evidence,
+        description: values.description,
+      });
+      if (res.code === 0) {
+        message.success('更新成功');
+      } else {
+        message.error(res.msg);
+      }
+    } catch (error) {
+      message.error('更新失败');
+    }
+    closeEditDoctorInfoModal();
     loadData();
   };
 
@@ -143,6 +177,17 @@ const DockerConsultation: React.FC = () => {
   useEffect(() => {
     loadData();
   }, [searchParams]);
+
+  // 添加useEffect监听
+  useEffect(() => {
+    if (editDoctorInfoModel && currentDoctorInfo) {
+      doctorInfoForm.setFieldsValue({
+        type: currentDoctorInfo.type,
+        evidence: currentDoctorInfo.evidence,
+        description: currentDoctorInfo.description,
+      });
+    }
+  }, [currentDoctorInfo, editDoctorInfoModel, doctorInfoForm]);
 
   return (
     <div className="my-chart-page">
@@ -296,12 +341,6 @@ const DockerConsultation: React.FC = () => {
           <Form
             form={doctorInfoForm}
           >
-            <ProFormText
-              name="name"
-              label="姓名"
-              placeholder="输入姓名"
-              rules={[{required: true, message: '请选择姓名'}]}
-            />
             <ProFormSelect
               name="type"
               label="医生专业"
@@ -363,8 +402,8 @@ const DockerConsultation: React.FC = () => {
             <ProFormTextArea
               name="evidence"
               label="证明信息"
-              placeholder="请输入证明信息"
-              rules={[{required: true, message: '请输入证明信息'}]}
+              placeholder="请输入所在省份、医师姓名、所在医疗机构"
+              rules={[{required: true, message: '请输入所在省份、医师姓名、所在医疗机构'}]}
               fieldProps={{
                 autoSize: {minRows: 6, maxRows: 12},
                 showCount: true,
@@ -391,21 +430,15 @@ const DockerConsultation: React.FC = () => {
       <Modal
         title="医生信息编辑"
         open={editDoctorInfoModel}
-        onOk={applyForDoctor}
+        onOk={updateDoctorInfo}
         onCancel={closeEditDoctorInfoModal}
       >
         <Card>
           <Form
             form={doctorInfoForm}
           >
-            <ProFormDatePicker
-              name="name"
-              label="姓名"
-              placeholder="输入姓名"
-              rules={[{required: true, message: '请选择姓名'}]}
-            />
             <ProFormSelect
-              name="doctorSpecialty"
+              name="type"
               label="医生专业"
               options={[
                 {
@@ -462,36 +495,18 @@ const DockerConsultation: React.FC = () => {
                 }
               }}
             />
-            <ProFormUploadDragger
+            <ProFormTextArea
               name="evidence"
-              label="证明材料"
-              max={5}  // 最多上传5个文件
-              action="/api/upload"  // 替换为你的上传接口
-              rules={[{required: true, message: '请上传证明材料图片'}]}
+              label="证明信息"
+              placeholder="请输入所在省份、医师姓名、所在医疗机构"
+              rules={[{required: true, message: '请输入所在省份、医师姓名、所在医疗机构'}]}
               fieldProps={{
-                name: 'file',
-                listType: 'picture-card',
-                accept: 'image/*',
-                beforeUpload: (file) => {
-                  const isImage = file.type.startsWith('image/');
-                  if (!isImage) {
-                    message.error('只能上传图片文件');
-                  }
-                  return isImage || Upload.LIST_IGNORE;
-                },
+                autoSize: {minRows: 6, maxRows: 12},
+                showCount: true,
+                maxLength: 200,
+                allowClear: true
               }}
-              extra={
-                <div>
-                  <p>支持格式：JPG/PNG/PDF</p>
-                  <p>单个文件不超过5MB</p>
-                </div>
-              }
-            >
-              <div style={{padding: 16}}>
-                <UploadOutlined style={{fontSize: 24}}/>
-                <div>点击或拖拽上传证明材料</div>
-              </div>
-            </ProFormUploadDragger>
+            />
             <ProFormTextArea
               name="description"
               label="医生简介"

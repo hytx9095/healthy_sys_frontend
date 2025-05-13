@@ -25,6 +25,7 @@ const HealthyKnowledge: React.FC = () => {
   const [addForm] = Form.useForm();
   const [examineForm] = Form.useForm();
   const [editForm] = Form.useForm();
+  const [viewForm] = Form.useForm();
   const [searchParams, setSearchParams] = useState<API.HealthyKnowledgeQueryDTO>({...initSearchParams});
   const [currentHealthyKnowledge, setCurrentHealthyKnowledge] = useState<API.HealthyKnowledge>();
   const [healthyKnowledgeList, setHealthyKnowledgeList] = useState<API.HealthyKnowledgeVO[]>();
@@ -34,6 +35,7 @@ const HealthyKnowledge: React.FC = () => {
   const [addKnowledgeModel, setAddKnowledgeModel] = useState(false);
   const [examineModel, setExamineModel] = useState(false);
   const [editModel, setEditModel] = useState(false);
+  const [viewModel, setViewModel] = useState(false);
   let [dataChange] = useState(0);
 
   const loadData = async () => {
@@ -81,6 +83,7 @@ const HealthyKnowledge: React.FC = () => {
         healthyKnowledgeId: currentHealthyKnowledge?.id,
         result: 'pass',
         description: examineForm.getFieldValue('description'),
+        userId:  currentHealthyKnowledge?.userId,
       });
       if (res.code === 0) {
         message.success('审核成功');
@@ -101,6 +104,7 @@ const HealthyKnowledge: React.FC = () => {
         healthyKnowledgeId: currentHealthyKnowledge?.id,
         result: "not pass",
         description: examineForm.getFieldValue('description'),
+        userId:  currentHealthyKnowledge?.userId,
       });
       if (res.code === 0) {
         message.success('驳回成功');
@@ -171,6 +175,16 @@ const HealthyKnowledge: React.FC = () => {
     loadData();
   };
 
+  const openViewModal = (healthyKnowledge: API.HealthyKnowledgeVO) => {
+    setCurrentHealthyKnowledge(healthyKnowledge);
+    setViewModel(true);
+  }
+
+  const closeViewModal = () => {
+    setViewModel(false);
+    viewForm.resetFields()
+  }
+
   const deleteHealthyKnowledge = async (id: number) => {
     try {
       const res = await deleteHealthyKnowledgeUsingDelete({
@@ -192,6 +206,9 @@ const HealthyKnowledge: React.FC = () => {
       case 'edit':
         openEditModal(record)
         break;
+      case 'view':
+        openViewModal(record)
+        break;
       case 'delete':
         Modal.confirm({
           title: '确认删除',
@@ -210,6 +227,7 @@ const HealthyKnowledge: React.FC = () => {
     return (
       <Menu onClick={({key}) => handleMenuClick(key, record)}>
         {record.status === 1 && <Menu.Item key="edit">编辑</Menu.Item>}
+        <Menu.Item key="view">查看</Menu.Item>
         <Menu.Item key="delete" danger>删除</Menu.Item>
       </Menu>
     );
@@ -437,6 +455,28 @@ const HealthyKnowledge: React.FC = () => {
       >
         <Card>
           <Form form={editForm}>
+            <ProFormText
+              name={'tags'}
+              label={'标签'}
+              placeholder="请输入知识标签"
+            ></ProFormText>
+            <ProFormText
+              name={'content'}
+              label={'内容'}
+              placeholder={"请输入知识内容"}
+            ></ProFormText>
+          </Form>
+        </Card>
+      </Modal>
+
+      <Modal
+        title="健康知识详情"
+        open={viewModel}
+        onOk={closeViewModal}
+        onCancel={closeViewModal}
+      >
+        <Card>
+          <Form form={viewForm}>
             <ProFormText
               name={'tags'}
               label={'标签'}

@@ -2,7 +2,7 @@ import {Avatar, Button, Card, Form, List, message, Modal, Radio, Tag} from 'antd
 import Search from 'antd/es/input/Search';
 import React, {useEffect, useState} from 'react';
 import {
-  cancelStarHealthyKnowledgeUsingPost,
+  cancelStarHealthyKnowledgeUsingPost, getStarHealthyKnowledgeVoPageByIdUsingPost,
   getStarHealthyKnowledgeVoPageUsingPost, getStarredHealthyKnowledgeVoPageUsingPost,
   shareHealthyKnowledgeUsingPost,
   starHealthyKnowledgeUsingPost
@@ -10,6 +10,7 @@ import {
 import {ProFormText} from "@ant-design/pro-components";
 import {ProFormTextArea} from "@ant-design/pro-form/lib";
 import {StarFilled, StarOutlined} from "@ant-design/icons";
+import {useModel} from "@@/exports";
 
 /**
  * 健康知识库页面
@@ -24,6 +25,8 @@ const HealthyKnowledge: React.FC = () => {
   };
 
   const [shareForm] = Form.useForm();
+  const {initialState} = useModel('@@initialState');
+  const {currentUser} = initialState ?? {};
   const [searchParams, setSearchParams] = useState<API.HealthyKnowledgeQueryDTO>({...initSearchParams});
   const [healthyKnowledgeList, setHealthyKnowledgeList] = useState<API.HealthyKnowledgeVO[]>();
   const [total, setTotal] = useState<number>(0);
@@ -54,6 +57,7 @@ const HealthyKnowledge: React.FC = () => {
     setLoading(false);
   };
 
+
   const loadStarredData = async () => {
     setLoading(true);
     try {
@@ -72,6 +76,27 @@ const HealthyKnowledge: React.FC = () => {
     }
     setLoading(false);
   };
+
+  const loadMyData = async () => {
+    setLoading(true);
+    try {
+      const res = await getStarHealthyKnowledgeVoPageByIdUsingPost({
+        ...searchParams,
+        status: 1,
+        userId: currentUser?.id,
+      });
+      if (res.data) {
+        setHealthyKnowledgeList(res.data.records ?? []);
+        setTotal(res.data.total ?? 0);
+      } else {
+        message.error('获取健康知识失败');
+      }
+    } catch (e: any) {
+      message.error('获取健康知识失败，' + e.message);
+    }
+    setLoading(false);
+  };
+
   const starHealthyKnowledge = async (id: number) => {
     try {
       const res = await starHealthyKnowledgeUsingPost({
@@ -95,7 +120,7 @@ const HealthyKnowledge: React.FC = () => {
       });
       if (res.code === 0) {
         loadData();
-        message.success('取消收藏成功');
+        message.success('取消收藏');
       } else {
         message.error('取消收藏失败');
       }
@@ -163,6 +188,9 @@ const HealthyKnowledge: React.FC = () => {
           <Radio value="examine" onClick={() => {
             loadStarredData()
           }}>收藏</Radio>
+          <Radio value="myKnowledge" onClick={() => {
+            loadMyData()
+          }}>我的分享</Radio>
         </Radio.Group>
       </div>
       <div style={{marginTop: 20}}>
@@ -222,6 +250,18 @@ const HealthyKnowledge: React.FC = () => {
                     : () => cancelStarHealthyKnowledge(item.id as number)}
                 />
               </div>
+              {item.userId === currentUser?.id && (
+                <div style={{marginTop: '10px'}}>
+                  <div style={{position: 'absolute', bottom: 16, right: 16, marginTop: 16}}>
+                    {item.status === 1 && (
+                      <Tag color="green" onClick={()=>{message.success("success")}}>审核通过</Tag>
+                    )}
+                    {item.status === 2 && (
+                      <Tag color="red" onClick={()=>{message.error("error")}}>审核未通过</Tag>
+                    )}
+                  </div>
+                </div>
+              )}
             </Card>
           </List.Item>
         )}
@@ -236,14 +276,14 @@ const HealthyKnowledge: React.FC = () => {
         <Card>
           <Form
             form={shareForm}>
-            <ProFormText
-              name={'type'}
-              label={'类型'}
-              placeholder={"请输入知识类型"}
-            ></ProFormText>
+            {/*<ProFormText*/}
+            {/*  name={'type'}*/}
+            {/*  label={'类型'}*/}
+            {/*  placeholder={"请输入知识类型"}*/}
+            {/*></ProFormText>*/}
             <ProFormText
               name={'tags'}
-              label={'标签'}
+              label={'健康标签'}
               placeholder="请输入知识标签"
             ></ProFormText>
             <ProFormTextArea

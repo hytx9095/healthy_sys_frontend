@@ -23,12 +23,6 @@ const Register: React.FC = () => {
     };
   });
 
-  // useEffect(() => {
-  //   testUsingPost({}).then((res) => {
-  //     console.error('res', res);
-  //   });
-  // });
-
   const handleSubmit = async (values: API.UserRegisterDTO) => {
     const { checkPassword, userPassword} = values;
     //校验
@@ -47,7 +41,7 @@ const Register: React.FC = () => {
         history.push(urlParams.get('redirect') || '/user/login');
         return;
       } else {
-        message.error(res.message);
+        message.error(res.msg);
       }
     } catch (error) {
       const defaultRegisterFailureMessage = '注册失败，请重试！';
@@ -103,11 +97,11 @@ const Register: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined />,
                 }}
-                placeholder={'请输入用户名'}
+                placeholder={'请输入账号'}
                 rules={[
                   {
                     required: true,
-                    message: '用户名是必填项！',
+                    message: '账号是必填项！',
                   },
                 ]}
               />

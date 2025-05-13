@@ -264,6 +264,14 @@ declare namespace API {
     DiseaseInfoId: number;
   };
 
+  type GetDoctorInfoDTO = {
+    current?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    userId?: number;
+  };
+
   type getDoctorInfoUsingGETParams = {
     /** doctorInfoId */
     doctorInfoId: number;
@@ -320,6 +328,7 @@ declare namespace API {
     description?: string;
     healthyKnowledgeId?: number;
     result?: string;
+    userId?: number;
   };
 
   type HealthyKnowledgeListDTO = {

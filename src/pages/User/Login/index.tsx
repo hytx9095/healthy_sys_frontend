@@ -25,12 +25,6 @@ const Login: React.FC = () => {
     };
   });
 
-  // useEffect(() => {
-  //   testUsingPost({}).then((res) => {
-  //     console.error('res', res);
-  //   });
-  // });
-
   const handleSubmit = async (values: API.LoginVO) => {
     try {
       // 登录
@@ -105,11 +99,11 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined />,
                 }}
-                placeholder={'请输入用户名'}
+                placeholder={'请输入账号'}
                 rules={[
                   {
                     required: true,
-                    message: '用户名是必填项！',
+                    message: '账号是必填项！',
                   },
                 ]}
               />

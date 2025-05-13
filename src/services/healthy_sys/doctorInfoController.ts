@@ -47,6 +47,21 @@ export async function doctorExamineUsingPost(
   });
 }
 
+/** 获取医生信息 POST /api/doctor/info/get */
+export async function getDoctorInfoByUserIdUsingPost(
+  body: API.GetDoctorInfoDTO,
+  options?: { [key: string]: any },
+) {
+  return request<API.RDoctorInfo_>('/api/doctor/info/get', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 获取医生信息 GET /api/doctor/info/get/${param0} */
 export async function getDoctorInfoUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
