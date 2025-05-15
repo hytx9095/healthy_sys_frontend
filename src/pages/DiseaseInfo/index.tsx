@@ -12,7 +12,7 @@ import Search from 'antd/es/input/Search';
 import React, {useEffect, useState} from 'react';
 import {ProFormText} from "@ant-design/pro-components";
 import dayjs from "dayjs";
-import {ProFormDatePicker, ProFormSelect, ProFormTimePicker} from "@ant-design/pro-form/lib";
+import {ProFormDatePicker, ProFormTimePicker} from "@ant-design/pro-form/lib";
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import {
   addDiseaseInfoUsingPost,
@@ -183,12 +183,13 @@ const DiseaseInfo: React.FC = () => {
     );
   };
 
-  const getDiseaseText = (type: number) => {
-    const diseaseTypeMap = {
-      1: '感染性疾病',
-    };
-    return diseaseTypeMap[type as 1] || '未知类型';
-  };
+  // const getDiseaseText = (type: number) => {
+  //   const diseaseTypeMap = {
+  //     1: '感染性疾病',
+  //   };
+  //   return diseaseTypeMap[type as 1] || '未知类型';
+  // };
+
   // 当组件挂载时加载数据
   useEffect(() => {
     loadData();
@@ -281,7 +282,7 @@ const DiseaseInfo: React.FC = () => {
                 title={currentUser && currentUser.username}
               />
               <div style={{ marginBottom: 16 }} />
-              <p>{'疾病类型：' + getDiseaseText(item.type as number)}</p>
+              {/*<p>{'疾病类型：' + getDiseaseText(item.type as number)}</p>*/}
               <p>{'疾病名称：' + item.diseaseName}</p>
               <p>{'疾病描述：' + item.description}</p>
               <ProFormText>{'生病时间：' + dayjs(String(item.happenTime)).format('YYYY-MM-DD HH:mm:ss')}</ProFormText>
@@ -315,22 +316,22 @@ const DiseaseInfo: React.FC = () => {
               }}
               rules={[{ required: true, message: '请选择时间' }]}
             />
-            <ProFormSelect
-              name={'type'}
-              label={'类型'}
-              placeholder={"请选择疾病类型"}
-              rules={[{ required: true, message: '请选择疾病类型' }]}
-              options={[
-                {
-                  value: '1',
-                  label: '疾病1',
-                },
-                {
-                  value: '2',
-                  label: '疾病2',
-                },
-              ]}
-            ></ProFormSelect>
+            {/*<ProFormSelect*/}
+            {/*  name={'type'}*/}
+            {/*  label={'类型'}*/}
+            {/*  placeholder={"请选择疾病类型"}*/}
+            {/*  rules={[{ required: true, message: '请选择疾病类型' }]}*/}
+            {/*  options={[*/}
+            {/*    {*/}
+            {/*      value: '1',*/}
+            {/*      label: '疾病1',*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      value: '2',*/}
+            {/*      label: '疾病2',*/}
+            {/*    },*/}
+            {/*  ]}*/}
+            {/*></ProFormSelect>*/}
             <ProFormText
               name={'diseaseName'}
               label={'名称'}
@@ -372,22 +373,22 @@ const DiseaseInfo: React.FC = () => {
               }}
               rules={[{ required: true, message: '请选择时间' }]}
             />
-            <ProFormSelect
-              name={'type'}
-              label={'类型'}
-              placeholder={"请选择疾病类型"}
-              rules={[{ required: true, message: '请选择疾病类型' }]}
-              options={[
-                {
-                  value: '1',
-                  label: '疾病1',
-                },
-                {
-                  value: '2',
-                  label: '疾病2',
-                },
-              ]}
-            ></ProFormSelect>
+            {/*<ProFormSelect*/}
+            {/*  name={'type'}*/}
+            {/*  label={'类型'}*/}
+            {/*  placeholder={"请选择疾病类型"}*/}
+            {/*  rules={[{ required: true, message: '请选择疾病类型' }]}*/}
+            {/*  options={[*/}
+            {/*    {*/}
+            {/*      value: '1',*/}
+            {/*      label: '疾病1',*/}
+            {/*    },*/}
+            {/*    {*/}
+            {/*      value: '2',*/}
+            {/*      label: '疾病2',*/}
+            {/*    },*/}
+            {/*  ]}*/}
+            {/*></ProFormSelect>*/}
             <ProFormText
               name={'diseaseName'}
               label={'名称'}

@@ -278,7 +278,7 @@ const RiskPrediction: React.FC = () => {
             onClick={generateRiskPredictions}
             loading={loading}
           >
-            {generating ? '正在分析风险......' : '分析风险'}
+            {generating ? '正在分析风险......' : '风险预测'}
           </Button>
         }
       >

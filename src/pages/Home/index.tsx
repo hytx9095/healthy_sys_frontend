@@ -130,7 +130,7 @@ const Home: React.FC = () => {
       <Row gutter={24} style={{ marginTop: 24 }}>
         {/* 健康知识区 */}
         <Col span={12}>
-          <Card title="今日份健康知识" bordered={false}>
+          <Card title="健康知识分享" bordered={false}>
             <Carousel autoplay autoplaySpeed={5000} dots={false}>
               {knowledgeList.map((item) => (
                 <div key={item.id}>
@@ -165,7 +165,7 @@ const Home: React.FC = () => {
 
         {/* 健康资讯区 */}
         <Col span={12}>
-          <Card title="今日份健康资讯" bordered={false} loading={loading}>
+          <Card title="健康资讯" bordered={false} loading={loading}>
             <Carousel autoplay autoplaySpeed={6000} dots={false}>
               {newsList.map((item) => (
                 <div key={item.id}>
