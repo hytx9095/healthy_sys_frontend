@@ -259,7 +259,7 @@ const DockerConsultation: React.FC = () => {
           </Card>
         ) : (
           <div>
-            <Button type={"primary"} style={{marginRight: 20}} onClick={openDoctorInfoModal}>申请成为医生</Button>
+            <Button type={"primary"} style={{marginRight: 20}} onClick={openDoctorInfoModal}>医生申请</Button>
             <Button type={"primary"} style={{marginRight: 20}}
                     onClick={() => {
                       history.push('/doctor/consult/center')
@@ -399,6 +399,7 @@ const DockerConsultation: React.FC = () => {
                 }
               }}
             />
+
             <ProFormTextArea
               name="evidence"
               label="证明信息"

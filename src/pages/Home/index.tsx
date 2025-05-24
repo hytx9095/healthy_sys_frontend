@@ -83,7 +83,7 @@ const Home: React.FC = () => {
             bgColor: '#fa8c16',
           },
           {
-            title: '健康知识社区',
+            title: '健康知识库',
             subtitle: '分享交流健康知识，提升全民健康意识',
             bgColor: '#722ed1',
           },

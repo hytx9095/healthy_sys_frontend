@@ -74,6 +74,7 @@ const DoctorInfo: React.FC = () => {
   const passDoctorInfo = async () => {
     try {
       const res = await doctorExamineUsingPost({
+        userId: currentDoctorInfo?.userId,
         doctorInfoId: currentDoctorInfo?.id,
         result: 'pass',
         description: examineForm.getFieldValue('description'),
@@ -93,6 +94,7 @@ const DoctorInfo: React.FC = () => {
   const rejectDoctorInfo = async () => {
     try {
       const res = await doctorExamineUsingPost({
+        userId: currentDoctorInfo?.userId,
         doctorInfoId: currentDoctorInfo?.id,
         result: "not pass",
         description: examineForm.getFieldValue('description'),

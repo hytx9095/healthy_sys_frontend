@@ -246,7 +246,7 @@ const HealthyKnowledge: React.FC = () => {
         content: currentHealthyKnowledge.content,
       });
     }
-  }, [currentHealthyKnowledge, editModel, editForm]);
+  }, [currentHealthyKnowledge, viewModel, viewForm, editModel, editForm]);
 
   return (
     <div className="my-chart-page">
@@ -329,7 +329,7 @@ const HealthyKnowledge: React.FC = () => {
                 {item.status === 0 && (
                   <>
                     <div style={{marginBottom: 16}}/>
-                    <p>{'内容：' + item.content}</p>
+                    <p>{item.content}</p>
                     <div style={{
                       display: 'flex',
                       justifyContent: 'space-between',
@@ -389,7 +389,7 @@ const HealthyKnowledge: React.FC = () => {
                 {item.status !== 0 && (
                   <>
                     <div style={{marginBottom: 16}}/>
-                    <p style={{marginBottom: 30}}>{'内容：' + item.content}</p>
+                    <p style={{marginBottom: 30}}>{item.content}</p>
                     <div style={{
                       display: 'flex',
                       justifyContent: 'space-between',
@@ -478,15 +478,27 @@ const HealthyKnowledge: React.FC = () => {
         <Card>
           <Form form={viewForm}>
             <ProFormText
+              name={'id'}
+              label={'健康知识id'}
+            >{currentHealthyKnowledge?.id}</ProFormText>
+            <ProFormText
+              name={'userId'}
+              label={'用户id'}
+            >{currentHealthyKnowledge?.userId}</ProFormText>
+            <ProFormText
               name={'tags'}
               label={'标签'}
               placeholder="请输入知识标签"
-            ></ProFormText>
+            >{currentHealthyKnowledge?.tags}</ProFormText>
             <ProFormText
               name={'content'}
               label={'内容'}
               placeholder={"请输入知识内容"}
-            ></ProFormText>
+            >{currentHealthyKnowledge?.content}</ProFormText>
+            <ProFormText
+              name={'createTime'}
+              label={"创建时间"}
+            >{moment(String(currentHealthyKnowledge?.createTime)).format('YYYY-MM-DD HH:mm:ss')}</ProFormText>
           </Form>
         </Card>
       </Modal>

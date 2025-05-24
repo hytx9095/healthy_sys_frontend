@@ -64,7 +64,7 @@ const BasicHealth: React.FC = () => {
       const heightInMeters = Number(height) / 100;
       const bmi = Number(weight) / (heightInMeters * heightInMeters);
       setBmiValue(parseFloat(bmi.toFixed(1)));
-      form.setFieldsValue({BMI: parseFloat(bmi.toFixed(1))});
+      form.setFieldsValue({bmi: parseFloat(bmi.toFixed(1))});
     }
   };
 
@@ -263,10 +263,10 @@ const BasicHealth: React.FC = () => {
                   gap: screens.xs ? 8 : 16
                 }}>
                   {
-                    form.getFieldValue('BMI') ? (
+                    form.getFieldValue('bmi') ? (
                       <ProFormDigit
-                        name="BMI"
-                        placeholder={form.getFieldValue('BMI')}
+                        name="bmi"
+                        placeholder={form.getFieldValue('bmi')}
                         disabled
                         fieldProps={{
                           style: {
@@ -277,7 +277,7 @@ const BasicHealth: React.FC = () => {
                       />
                     ) : (
                       <ProFormDigit
-                        name="BMI"
+                        name="bmi"
                         placeholder="自动计算"
                         disabled
                         fieldProps={{
@@ -290,17 +290,6 @@ const BasicHealth: React.FC = () => {
                     )
                   }
 
-                  {/*<ProFormDigit*/}
-                  {/*  name="BMI"*/}
-                  {/*  placeholder="自动计算"*/}
-                  {/*  disabled*/}
-                  {/*  fieldProps={{*/}
-                  {/*    style: {*/}
-                  {/*      width: screens.xs ? '100%' : '120px',*/}
-                  {/*      marginBottom: screens.xs ? 8 : 0*/}
-                  {/*    }*/}
-                  {/*  }}*/}
-                  {/*/>*/}
                   {bmiValue && (
                     <>
                       <Badge
@@ -401,7 +390,7 @@ const BasicHealth: React.FC = () => {
               style={{backgroundColor: '#f5222d', marginRight: '12px'}}
               icon={<HeartOutlined/>}
             />
-            <Text strong style={{fontSize: screens.xs ? '14px' : '16px'}}>生命体征</Text>
+            <Text strong style={{fontSize: screens.xs ? '14px' : '16px'}}>其他</Text>
           </div>
         }
       >

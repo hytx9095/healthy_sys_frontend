@@ -218,6 +218,7 @@ declare namespace API {
   };
 
   type DoctorInfoExamineDTO = {
+    userId: number;
     description?: string;
     doctorInfoId?: number;
     result?: string;
